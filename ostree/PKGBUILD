@@ -1,0 +1,31 @@
+# Maintainer: Daniel Narvaez <dwnarvaez@gmail.com> 
+
+pkgname=ostree-git
+pkgver=v2013.6.135.gaf1c9b8
+pkgrel=1
+pkgdesc="Tool for managing bootable, immutable, versioned filesystem trees"
+arch=('i686' 'x86_64')
+url="https://wiki.gnome.org/OSTree"
+license=('LGPL')
+depends=()
+makedepends=('gtk-doc')
+source=("$pkgname"::'git://git.gnome.org/ostree.git')
+md5sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  local ver="$(git describe --tags --long)"
+  printf "%s" "${ver//-/.}"
+}
+
+build() {
+  cd ${srcdir}/${pkgname}
+  ./autogen.sh --prefix=/usr
+  echo 3
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}
+  make DESTDIR="$pkgdir" install
+}
